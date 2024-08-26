@@ -46,6 +46,10 @@ public class Proyecto {
     @JoinColumn(name = "estado_proyecto_id", nullable = false)
     private EstadoProyecto estado;
 
+    @ManyToOne(targetEntity = Categoria.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
     @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "uruario_alta_id", nullable = false)
     private Usuario usuario;

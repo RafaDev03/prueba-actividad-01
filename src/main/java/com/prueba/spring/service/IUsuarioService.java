@@ -1,10 +1,11 @@
 package com.prueba.spring.service;
 
-import com.prueba.spring.controller.dto.UsuarioDTO;
-import com.prueba.spring.entity.Usuario;
+import com.prueba.spring.controller.dto.UsuarioGetDTO;
+import com.prueba.spring.controller.dto.UsuarioPostDTO;
 
 public interface IUsuarioService {
-    UsuarioDTO findById(Long id);
+    UsuarioGetDTO findById(Long id);
 
-    void save(Usuario usuario);
+    UsuarioGetDTO update(UsuarioPostDTO usuarioPostDTO, Long id);
+
 }

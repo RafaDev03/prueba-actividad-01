@@ -35,11 +35,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
                     http.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
-                    http.requestMatchers(HttpMethod.POST, "/api/upload/**").hasAnyRole("ADMIN", "DEVELOPER");
-                    http.requestMatchers(HttpMethod.GET, "/api/upload/**").hasAnyRole("ADMIN", "DEVELOPER");
-                    http.requestMatchers(HttpMethod.GET, "/api/proyecto/**").hasAnyRole("ADMIN", "DEVELOPER", "USER");
-                    http.requestMatchers(HttpMethod.POST, "/api/proyecto/**").hasAnyRole("ADMIN", "DEVELOPER");
-                    http.requestMatchers(HttpMethod.GET, "/api/usuario/**").hasAnyRole("ADMIN", "DEVELOPER");
+                    http.requestMatchers(HttpMethod.POST, "/api/upload/**").hasAnyRole("ADMIN", "GERENTE");
+                    http.requestMatchers(HttpMethod.GET, "/api/upload/**").hasAnyRole("ADMIN", "GERENTE");
+                    http.requestMatchers(HttpMethod.GET, "/api/proyecto/**").hasAnyRole("ADMIN", "GERENTE", "USER");
+                    http.requestMatchers(HttpMethod.POST, "/api/proyecto/**").hasAnyRole("ADMIN", "GERENTE");
+                    http.requestMatchers(HttpMethod.GET, "/api/usuario/**").hasAnyRole("ADMIN", "GERENTE");
+                    http.requestMatchers(HttpMethod.PUT, "/api/usuario/**").hasAnyRole("ADMIN", "GERENTE");
 
                 }).addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();

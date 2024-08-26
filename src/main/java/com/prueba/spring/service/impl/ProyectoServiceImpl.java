@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.prueba.spring.controller.dto.ProyectoGetDTO;
 import com.prueba.spring.controller.dto.ProyectoPostDTO;
+import com.prueba.spring.entity.Categoria;
 import com.prueba.spring.entity.EstadoProyecto;
 import com.prueba.spring.entity.Proyecto;
 import com.prueba.spring.entity.Usuario;
 import com.prueba.spring.persistence.IProyectoDAO;
+import com.prueba.spring.repository.CategoriaRepository;
 import com.prueba.spring.repository.EstadoProyectoRepository;
 import com.prueba.spring.repository.UsuarioRepository;
 import com.prueba.spring.service.IProyectoService;
@@ -31,6 +33,9 @@ public class ProyectoServiceImpl implements IProyectoService {
         @Autowired
         private UsuarioRepository usuarioRepository;
 
+        @Autowired
+        private CategoriaRepository categoriaRepository;
+
         @Override
         public List<ProyectoGetDTO> findAll() {
                 List<Proyecto> listaProyecto = proyectoDAO.findAll();
@@ -43,6 +48,7 @@ public class ProyectoServiceImpl implements IProyectoService {
                                                 proyecto.getFechaInicio(),
                                                 proyecto.getFechaFinal(),
                                                 proyecto.getLogo(),
+                                                proyecto.getCategoria().getNombreCategoria(),
                                                 proyecto.getEstado().getNombreEstado().name()))
                                 .collect(Collectors.toList());
         }
@@ -66,6 +72,7 @@ public class ProyectoServiceImpl implements IProyectoService {
                                 proyecto.getFechaInicio(),
                                 proyecto.getFechaFinal(),
                                 proyecto.getLogo(),
+                                proyecto.getCategoria().getNombreCategoria(),
                                 proyecto.getEstado().getNombreEstado().name());
         }
 
@@ -73,6 +80,9 @@ public class ProyectoServiceImpl implements IProyectoService {
         public void save(ProyectoPostDTO proyectoPostDTO) {
                 EstadoProyecto estadoProyecto = estadoProyectoRepository.findById(proyectoPostDTO.estado())
                                 .orElseThrow(() -> new NoSuchElementException("Estado de proyecto no encontrado"));
+
+                Categoria categoria = categoriaRepository.findById(proyectoPostDTO.categoria())
+                                .orElseThrow(() -> new NoSuchElementException("Categoría no disponible"));
 
                 String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -87,6 +97,7 @@ public class ProyectoServiceImpl implements IProyectoService {
                                 .fechaFinal(proyectoPostDTO.fichaFinal())
                                 .logo(proyectoPostDTO.logo())
                                 .estado(estadoProyecto)
+                                .categoria(categoria)
                                 .usuario(usuarioAlta)
                                 .build();
 
